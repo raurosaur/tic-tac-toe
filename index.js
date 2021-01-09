@@ -1,25 +1,15 @@
 //Game Elements
-import {checkColumn, checkRow, checkDiagonal} from './game.js';
+import {checkForWin, compGame} from './game.js';
 console.log();
 let board = [], roundOver = false, player = 'O', comp = 'X';
 
 reset();
 
-const checkForWin = function(){
-    let result = checkRow(board);
-    if(result.hasWon)
-        return result;
-    result = checkColumn(board);
-    if(result.hasWon)
-        return result;
-    return checkDiagonal(board);
-};
-
-function compGame(){
+/*function compGame(){
     const getRandom = function() {
         return Math.floor(Math.random() * 9);
     }
-    if(hasSpace())
+    if (hasSpace(board))
         while(true){
             let number = getRandom();
             if(!squares[number].textContent){
@@ -28,21 +18,21 @@ function compGame(){
                 break;
             }
         }
-}
+}*/
 
 function check(){
-    let { hasWon, winner } = checkForWin();
+    let {hasWon, winner} = checkForWin(board, player);
     if (hasWon) {
         roundOver = true;
         alert((winner === player) ? 'Yay! You won' : 'Oops, I won');
     }
-    if(!hasSpace()){
+    if(!roundOver && !hasSpace(board)){
         roundOver = true;
         alert('It\'s a Tie');
     }
 }
 
-function hasSpace(){
+function hasSpace(board){
     for (let i of board) {
         for (let e of i)
             if (!e) return true;
@@ -60,14 +50,22 @@ function reset(){
 const squares = document.querySelectorAll('.squares'),
 restart = document.getElementsByClassName('restart')[0],
 choose = document.getElementById('playAs');
-
 squares.forEach(el => {
     el.addEventListener('click', (event) => {
         if(roundOver || event.target.innerText !== '')
             return;
         playerGame(event);
-        if(!roundOver) compGame();
-        setTimeout(check, 300);
+        setTimeout(check, 100);
+        setTimeout(() => {
+        if (!roundOver) {
+            let {i, j} = compGame(board, player, comp, hasSpace);
+            board[i][j] = comp;
+            if(!roundOver){
+                let box = document.querySelector(`.squares[data-i = "${i}"][data-j = "${j}"]`);
+                box.innerText = comp;
+                setTimeout(check, 300);
+            }
+        }}, 150);
     });
 });
 
@@ -82,7 +80,10 @@ function playerGame(event){
 choose.addEventListener('input', (event) => {
     player = (event.target.value === 'X') ? 'X' : 'O';
     comp = (player === 'O') ? 'X' : 'O';
-    if(comp === 'O' && !roundOver) 
-        compGame();
+    if(comp === 'X' && !roundOver){
+        board[1][1] = comp;
+        let box = document.querySelector(`.squares[data-i = "1"][data-j = "1"]`);
+        box.innerText = comp;
+    }
 });
 restart.addEventListener('click', () => {reset(); clearScreen()});
