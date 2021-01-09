@@ -71,6 +71,11 @@ squares.forEach(el => {
 
 function clearScreen(){
     squares.forEach(el => {el.innerText = '';});
+    if(document.getElementById('playAs').value === 'O'){
+        board[1][1] = comp;
+        let box = document.querySelector(`.squares[data-i = "1"][data-j = "1"]`);
+        box.innerText = comp;
+    }
 }
 
 function playerGame(event){
