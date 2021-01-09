@@ -5,21 +5,6 @@ let board = [], roundOver = false, player = 'O', comp = 'X';
 
 reset();
 
-/*function compGame(){
-    const getRandom = function() {
-        return Math.floor(Math.random() * 9);
-    }
-    if (hasSpace(board))
-        while(true){
-            let number = getRandom();
-            if(!squares[number].textContent){
-                board[+squares[number].getAttribute('data-i')][+squares[number].getAttribute('data-j')] = comp;
-                squares[number].textContent = comp;
-                break;
-            }
-        }
-}*/
-
 function check(){
     let {hasWon, winner} = checkForWin(board, player);
     if (hasWon) {
