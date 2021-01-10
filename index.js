@@ -1,7 +1,7 @@
 //Game Elements
 import {checkForWin, compGame} from './game.js';
 console.log();
-let board = [], roundOver = false, player = 'O', comp = 'X';
+let board = [], roundOver = false, player = 'X', comp = 'O';
 
 reset();
 
